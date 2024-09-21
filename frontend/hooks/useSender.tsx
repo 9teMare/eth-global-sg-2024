@@ -1,16 +1,22 @@
 import { SupabaseContext } from "@/components/provider/supabase-provider";
-import abi from "@/contract/SenderAbi.json";
+import ccipSender from "@/contract/ccip/SenderAbi.json";
+import layerzeroSender from "@/contract/layerzero/Source.json";
+
 import { hash } from "@/lib/utils";
+
 import { useContext } from "react";
-import { useWriteContract } from "wagmi";
+import { useWriteContract, useSwitchChain } from "wagmi";
+import { v4 as uuidv4 } from "uuid";
 
 export default function useSender({
+    crosschain,
     publicKey,
     prompt,
     nullifier,
     imageTitle,
     imageBlob,
 }: {
+    crosschain: "chainlink" | "layerzero";
     publicKey: string;
     prompt: string;
     nullifier: string;
@@ -18,13 +24,16 @@ export default function useSender({
     imageBlob: Blob;
 }) {
     const { writeContractAsync } = useWriteContract();
+    const { switchChainAsync } = useSwitchChain();
 
     const supabase = useContext(SupabaseContext);
 
     const send = async () => {
         const promptHash = await hash(prompt);
 
-        const s3result = await supabase?.storage.from("images").upload(`${imageTitle}.png`, imageBlob);
+        const id = uuidv4();
+
+        const s3result = await supabase?.storage.from("images").upload(`${id}.png`, imageBlob);
 
         if (!s3result || s3result.error) {
             console.error(s3result?.error);
@@ -47,12 +56,26 @@ export default function useSender({
             return;
         }
 
-        await writeContractAsync({
-            abi,
-            address: "0xd3761Dc1B35087583CF96a4c28C4581A145Ee823",
-            functionName: "sendMessage",
-            args: ["16015286601757825753", "0x4c94a4b3fA89B438A8974b288fE31e85cf264532", `${promptHash}|${nullifier}|${publicKey}`],
-        });
+        if (crosschain === "chainlink") {
+            await switchChainAsync({ chainId: 43113 });
+
+            await writeContractAsync({
+                abi: ccipSender,
+                address: "0xb0A71Afd378A5A22AA4C92B89F9714C8ccB5B51E",
+                functionName: "sendMessage",
+                args: ["16015286601757825753", "0x4c94a4b3fA89B438A8974b288fE31e85cf264532", `${promptHash}|${nullifier}|${publicKey}`],
+            });
+        } else if (crosschain === "layerzero") {
+            await switchChainAsync({ chainId: 11155111 });
+
+            await writeContractAsync({
+                abi: layerzeroSender,
+                value: BigInt(5000000000000000),
+                address: "0x67abB8eBB917f8D2D9FeA7d3Cb596895dffDE15d",
+                functionName: "send",
+                args: [40232, `${promptHash}|${nullifier}|${publicKey}`],
+            });
+        }
     };
 
     return send;

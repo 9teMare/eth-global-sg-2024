@@ -7,17 +7,28 @@ import { GlobeIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Dispatch, SetStateAction } from "react";
 
-export default function WorldIdModal({ setNullifier }: { setNullifier: Dispatch<SetStateAction<string>> }) {
+export default function WorldIdModal({
+    setNullifier,
+    setIsHuman,
+}: {
+    setNullifier: Dispatch<SetStateAction<string>>;
+    setIsHuman: Dispatch<SetStateAction<boolean>>;
+}) {
     const handleVerify = async (proof: ISuccessResult) => {
         console.log("BACKEND_URL", BACKEND_URL);
         const res = await ky.post(BACKEND_URL + "/api/verify", {
             body: JSON.stringify(proof),
         });
 
-        console.log("Verification response:", res);
         if (!res.ok) {
             throw new Error("Verification failed."); // IDKit will display the error message to the user in the modal
         }
+
+        const json = (await res.json()) as { verifyRes: { success: boolean } };
+
+        console.log("Verification result:", json);
+
+        setIsHuman(json.verifyRes.success);
     };
 
     const onSuccess = (proof: ISuccessResult) => {
