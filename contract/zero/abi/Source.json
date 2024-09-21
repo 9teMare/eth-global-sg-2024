@@ -208,75 +208,6 @@
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint32",
-				"name": "_dstEid",
-				"type": "uint32"
-			},
-			{
-				"internalType": "string",
-				"name": "_message",
-				"type": "string"
-			}
-		],
-		"name": "send",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_delegate",
-				"type": "address"
-			}
-		],
-		"name": "setDelegate",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint32",
-				"name": "_eid",
-				"type": "uint32"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "_peer",
-				"type": "bytes32"
-			}
-		],
-		"name": "setPeer",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -416,6 +347,75 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint32",
+				"name": "_dstEid",
+				"type": "uint32"
+			},
+			{
+				"internalType": "string",
+				"name": "_message",
+				"type": "string"
+			}
+		],
+		"name": "send",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_delegate",
+				"type": "address"
+			}
+		],
+		"name": "setDelegate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint32",
+				"name": "_eid",
+				"type": "uint32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "_peer",
+				"type": "bytes32"
+			}
+		],
+		"name": "setPeer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
