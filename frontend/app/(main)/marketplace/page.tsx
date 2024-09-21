@@ -18,6 +18,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import Marquee from "@/components/magicui/marquee";
 import { NeonGradientCard } from "@/components/magicui/neon-gradient-card";
 import { createClient } from "@/utils/supabase/client";
+import { AvaxIcon, EthIcon, MinaIcon, OpIcon } from "@/components/icons/eth";
 
 export default function Component() {
     const supabase = createClient();
@@ -43,10 +44,18 @@ export default function Component() {
         }
         setNfts(data || []);
     };
-    
+        
     useEffect(() => {
         fetchNfts();
     }, []);
+
+
+    const chainIcons = {
+        "eth": <EthIcon />,
+        "avax": <AvaxIcon />,
+        "op": <OpIcon />,
+        "mina": <MinaIcon />,
+    }
 
     return (
         <TabsContent value="marketplace">
@@ -69,7 +78,12 @@ export default function Component() {
                                         width="300"
                                     />
                                     <div className="p-4">
-                                        <h3 className="font-bold">{nft.image_title}</h3>
+                                        <div className="flex flex-row items-center">
+                                            <h3 className="font-bold truncate max-w-[200px]">{nft.image_title}</h3> 
+                                            <div className="flex items-center h-5 w-5 ml-auto">
+                                                {chainIcons[nft.chain as keyof typeof chainIcons]}
+                                            </div>
+                                        </div>
                                         <p className="text-sm ">Floor: 2.5 ETH</p>
                                         <div className="mt-2 flex items-center justify-between">
                                             <span className="text-sm font-semibold">Current Bid: 3.2 ETH</span>
