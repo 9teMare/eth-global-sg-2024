@@ -17,4 +17,4 @@ COPY . /app
 EXPOSE 8080
 
 # Command to run the Bun app
-CMD ["bun", "run", "src/index.ts"]
+CMD ["bun", "run", "--hot", "src/index.ts"]
