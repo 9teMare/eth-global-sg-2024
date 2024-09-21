@@ -45,7 +45,7 @@ contract Receiver is CCIPReceiver {
             abi.decode(any2EvmMessage.data, (string))
         );
     }
-    function storeInferenceResult(string memory prompt_hash, string memory inference_result) external onlyOwner {
+    function storeInferenceResult(string memory prompt_hash, string memory inference_result) external{
         if (s_promptHashToMessageId[prompt_hash] == bytes32(0)) {
             revert("Prompt hash not found");
         }
