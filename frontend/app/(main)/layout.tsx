@@ -8,6 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
+import WorldIdModal from "@/components/world-id-modal";
 
 export default function Layout({ children }: { children: ReactNode }) {
     const router = useRouter();
@@ -36,6 +37,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                             <User className="h-4 w-4" />
                             <span className="sr-only">Profile</span>
                         </Button>
+                        <WorldIdModal />
                     </div>
                 </header>
                 <Tabs
