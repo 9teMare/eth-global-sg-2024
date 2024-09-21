@@ -5,8 +5,9 @@ import { IDKitWidget, ISuccessResult, VerificationLevel } from "@worldcoin/idkit
 import ky from "ky";
 import { GlobeIcon } from "lucide-react";
 import { Button } from "./ui/button";
+import { Dispatch, SetStateAction } from "react";
 
-export default function WorldIdModal() {
+export default function WorldIdModal({ setNullifier }: { setNullifier: Dispatch<SetStateAction<string>> }) {
     const handleVerify = async (proof: ISuccessResult) => {
         console.log("BACKEND_URL", BACKEND_URL);
         const res = await ky.post(BACKEND_URL + "/api/verify", {
@@ -20,9 +21,8 @@ export default function WorldIdModal() {
     };
 
     const onSuccess = (proof: ISuccessResult) => {
-        // This is where you should perform frontend actions if the verification succeeds
-        // Such as, updating the UI to show that the user is verified
         console.log("Verification successful!", proof);
+        setNullifier(proof.nullifier_hash);
     };
 
     return (
@@ -34,9 +34,9 @@ export default function WorldIdModal() {
             verification_level={VerificationLevel.Device}
         >
             {({ open }) => (
-                <Button variant="ghost" size="icon" onClick={open}>
+                <Button variant="ghost" className="w-fit flex items-center space-x-2" onClick={open}>
                     <GlobeIcon className="h-4 w-4" />
-                    <span className="sr-only">Verify with World ID</span>
+                    <span>Verify with World ID</span>
                 </Button>
             )}
         </IDKitWidget>

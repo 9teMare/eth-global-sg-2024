@@ -2,19 +2,19 @@
 
 import { BarChart3, Bell, Plus, Search, User, Wallet } from "lucide-react";
 
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ReactNode } from "react";
-import { useRouter } from "next/navigation";
-import { ThemeToggle } from "@/components/theme-toggle";
-import WorldIdModal from "@/components/world-id-modal";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import { useAppKit } from "@reown/appkit/react";
+import { useRouter } from "next/navigation";
+import { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
     const router = useRouter();
-    const { open, close } = useAppKit();
+    const { open } = useAppKit();
 
     return (
         <main className="flex flex-col min-h-screen bg-white dark:bg-background items-center border-b pb-6">
@@ -40,7 +40,6 @@ export default function Layout({ children }: { children: ReactNode }) {
                         <User className="h-4 w-4" />
                         <span className="sr-only">Profile</span>
                     </Button>
-                    <WorldIdModal />
                 </div>
             </header>
             <Tabs
@@ -51,7 +50,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 className="w-full px-4 md:px-6"
             >
                 <TabsList className="w-full justify-start h-12 bg-transparent">
-                    <TabsTrigger value="marketplace" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                    <TabsTrigger value="marketplace" className={cn("data-[state=active]:bg-primary data-[state=active]:text-primary-foreground")}>
                         Marketplace
                     </TabsTrigger>
                     <TabsTrigger value="create" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">

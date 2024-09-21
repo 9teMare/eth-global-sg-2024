@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { headers } from "next/headers";
 import "./globals.css";
+import SupabaseProvider from "@/components/provider/supabase-provider";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -31,9 +32,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                    <WagmiContextProvider cookies={cookies}>{children}</WagmiContextProvider>
-                </ThemeProvider>
+                <SupabaseProvider>
+                    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                        <WagmiContextProvider cookies={cookies}>{children}</WagmiContextProvider>
+                    </ThemeProvider>
+                </SupabaseProvider>
             </body>
         </html>
     );
