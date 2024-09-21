@@ -1,5 +1,5 @@
 # Use a lightweight Node.js image with Bun installed
-FROM jarredsumner/bun:latest
+FROM oven/bun:latest
 
 # Set the working directory in the container
 WORKDIR /app
