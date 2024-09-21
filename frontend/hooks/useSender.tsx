@@ -53,6 +53,7 @@ export default function useSender({
                 hash: promptHash,
                 nullifier: nullifier,
                 image_url: s3result.data.fullPath,
+                chain: crosschain === "chainlink" ? "avax" : crosschain === "layerzero_op" ? "op" : "morph",
             },
         ]);
 
