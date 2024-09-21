@@ -1,29 +1,36 @@
-// config/index.tsx
+import { cookieStorage, createStorage, http } from "@wagmi/core";
+import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
+import { sepolia, polygon } from "@reown/appkit/networks";
+import { CaipNetwork } from "@reown/appkit";
 
-import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
+// Get projectId from https://cloud.reown.com
+export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 
-import { cookieStorage, createStorage } from "wagmi";
-import { mainnet, sepolia } from "wagmi/chains";
+if (!projectId) {
+    throw new Error("Project ID is not defined");
+}
 
-// Your Reown Cloud project ID
-export const projectId = "e49f650caa4aa30ca3f2b9758e6b1d8e";
-
-// Create a metadata object
-const metadata = {
-    name: "ETH Global Singapore 2024",
-    description: "AppKit Example",
-    url: "https://reown.com/appkit", // origin must match your domain & subdomain
-    icons: ["https://assets.reown.com/reown-profile-pic.png"],
+const fuji: CaipNetwork = {
+    id: "eip155:43113",
+    chainId: 43113,
+    chainNamespace: "eip155",
+    name: "Avalanche Fuji",
+    currency: "AVAX",
+    explorerUrl: "https://testnet.snowtrace.io",
+    rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
+    imageUrl: "https://cryptologos.cc/logos/avalanche-avax-logo.png",
 };
 
-// Create wagmiConfig
-const chains = [mainnet, sepolia] as const;
-export const config = defaultWagmiConfig({
-    chains,
-    projectId,
-    metadata,
-    ssr: true,
+export const networks = [sepolia, fuji];
+
+//Set up the Wagmi Adapter (Config)
+export const wagmiAdapter = new WagmiAdapter({
     storage: createStorage({
         storage: cookieStorage,
     }),
+    ssr: true,
+    projectId,
+    networks,
 });
+
+export const config = wagmiAdapter.wagmiConfig;

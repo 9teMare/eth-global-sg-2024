@@ -10,14 +10,17 @@ import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 import WorldIdModal from "@/components/world-id-modal";
 import { Separator } from "@/components/ui/separator";
+import { useAppKit } from "@reown/appkit/react";
 
 export default function Layout({ children }: { children: ReactNode }) {
     const router = useRouter();
+    const { open, close } = useAppKit();
+
     return (
         <main className="flex flex-col min-h-screen bg-white dark:bg-background items-center border-b pb-6">
             <header className="flex items-center w-full h-16 px-4 md:px-6">
                 <nav className="flex-1 flex items-center space-x-4 lg:space-x-6">
-                    <div className="font-bold text-xl text-primary">Meme That Matters</div>
+                    <div className="font-bold text-xl text-primary">Prompt Fun</div>
                     <div className="relative w-full max-w-sm">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-primary" />
                         <Input className="pl-8" placeholder="Search memes..." type="search" />
@@ -29,7 +32,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                         <Bell className="h-4 w-4" />
                         <span className="sr-only">Notifications</span>
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" onClick={async () => await open()}>
                         <Wallet className="h-4 w-4" />
                         <span className="sr-only">Wallet</span>
                     </Button>

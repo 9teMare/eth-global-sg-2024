@@ -1,32 +1,44 @@
-// context/index.tsx
-
 "use client";
 
-import React, { ReactNode } from "react";
-import { config, projectId } from "@/config";
-
-import { createWeb3Modal } from "@web3modal/wagmi/react";
-
+import { networks, projectId, wagmiAdapter } from "@/config";
+import { sepolia } from "@reown/appkit/networks";
+import { createAppKit } from "@reown/appkit/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { type ReactNode } from "react";
+import { cookieToInitialState, WagmiProvider, type Config } from "wagmi";
 
-import { State, WagmiProvider } from "wagmi";
-
-// Setup queryClient
+// Set up queryClient
 const queryClient = new QueryClient();
 
-if (!projectId) throw new Error("Project ID is not defined");
+if (!projectId) {
+    throw new Error("Project ID is not defined");
+}
 
-// Create modal
-createWeb3Modal({
-    wagmiConfig: config,
+// Set up metadata
+const metadata = {
+    name: "Prompt Fun",
+    description: "AppKit Example - Scroll",
+    url: "https://scrollapp.com", // origin must match your domain & subdomain
+    icons: ["https://avatars.githubusercontent.com/u/179229932"],
+};
+
+// Create the modal
+createAppKit({
+    adapters: [wagmiAdapter],
     projectId,
-    enableAnalytics: true, // Optional - defaults to your Cloud configuration
-    enableOnramp: true, // Optional - false as default
+    networks: networks,
+    defaultNetwork: sepolia,
+    metadata: metadata,
+    features: {
+        analytics: true, // Optional - defaults to your Cloud configuration
+    },
 });
 
-export default function Web3ModalProvider({ children, initialState }: { children: ReactNode; initialState?: State }) {
+export default function WagmiContextProvider({ children, cookies }: { children: ReactNode; cookies: string | null }) {
+    const initialState = cookieToInitialState(wagmiAdapter.wagmiConfig as Config, cookies);
+
     return (
-        <WagmiProvider config={config} initialState={initialState}>
+        <WagmiProvider config={wagmiAdapter.wagmiConfig as Config} initialState={initialState}>
             <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
         </WagmiProvider>
     );

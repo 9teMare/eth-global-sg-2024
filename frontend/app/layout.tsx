@@ -1,11 +1,9 @@
+import { ThemeProvider } from "@/components/provider/theme-provider";
+import WagmiContextProvider from "@/components/provider/wagmi-provider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
-import { ThemeProvider } from "@/components/provider/theme-provider";
-import { cookieToInitialState } from "wagmi";
-import { config } from "@/config";
 import { headers } from "next/headers";
-import Web3ModalProvider from "@/components/provider/wagmi-provider";
+import "./globals.css";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -19,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-    title: "Meme That Matters",
+    title: "Prompt Fun",
     description: "Created for ETH Global Singapore 2024",
 };
 
@@ -28,13 +26,13 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const initialState = cookieToInitialState(config, headers().get("cookie"));
+    const cookies = headers().get("cookie");
 
     return (
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                    <Web3ModalProvider initialState={initialState}>{children}</Web3ModalProvider>
+                    <WagmiContextProvider cookies={cookies}>{children}</WagmiContextProvider>
                 </ThemeProvider>
             </body>
         </html>
