@@ -55,6 +55,8 @@ const config: Config = {
             animation: {
                 marquee: "marquee var(--duration) linear infinite",
                 "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
+                backgroundPositionSpin:
+                "background-position-spin 3000ms infinite alternate",
             },
             keyframes: {
                 marquee: {
@@ -65,7 +67,11 @@ const config: Config = {
                     from: { transform: "translateY(0)" },
                     to: { transform: "translateY(calc(-100% - var(--gap)))" },
                 },
-            },
+                "background-position-spin": {
+                  "0%": { backgroundPosition: "top center" },
+                  "100%": { backgroundPosition: "bottom center" },
+                },
+            }
         },
     },
     plugins: [require("tailwindcss-animate")],
