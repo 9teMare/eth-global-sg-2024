@@ -19,7 +19,7 @@ export default function Mint({ prompt, blob, image }: { prompt: string; blob: Bl
     const [imageTitle, setImageTitle] = useState<string>("");
     const [isHuman, setIsHuman] = useState<boolean>(false);
 
-    const [selectedCrossChain, setSelectedCrossChain] = useState<"chainlink" | "layerzero">("chainlink");
+    const [selectedCrossChain, setSelectedCrossChain] = useState<"chainlink" | "layerzero_op" | "layerzero_morph">("chainlink");
 
     const send = useSender({
         crosschain: selectedCrossChain,
@@ -76,14 +76,15 @@ export default function Mint({ prompt, blob, image }: { prompt: string; blob: Bl
                                     <p>Cross-chain Protocol</p>
                                     <Select
                                         value={selectedCrossChain}
-                                        onValueChange={(value) => setSelectedCrossChain(value as "chainlink" | "layerzero")}
+                                        onValueChange={(value) => setSelectedCrossChain(value as "chainlink" | "layerzero_op" | "layerzero_morph")}
                                     >
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Cross-chain protocol" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="chainlink">Chainlink</SelectItem>
-                                            <SelectItem value="layerzero">LayerZero</SelectItem>
+                                            <SelectItem value="layerzero_op">{`LayerZero (ETH -> OP)`}</SelectItem>
+                                            <SelectItem value="layerzero_morph">{`LayerZero (ETH -> Morth)`}</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>

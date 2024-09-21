@@ -17,7 +17,7 @@ export default function useSender({
     imageTitle,
     imageBlob,
 }: {
-    crosschain: "chainlink" | "layerzero";
+    crosschain: "chainlink" | "layerzero_op" | "layerzero_morph";
     publicKey: string;
     prompt: string;
     nullifier: string;
@@ -70,7 +70,17 @@ export default function useSender({
                 functionName: "sendMessage",
                 args: ["16015286601757825753", "0x4c94a4b3fA89B438A8974b288fE31e85cf264532", `${promptHash}|${nullifier}|${publicKey}`],
             });
-        } else if (crosschain === "layerzero") {
+        } else if (crosschain === "layerzero_op") {
+            await switchChainAsync({ chainId: 11155111 });
+
+            await writeContractAsync({
+                abi: layerzeroSender,
+                value: BigInt(5000000000000000),
+                address: "0x67abB8eBB917f8D2D9FeA7d3Cb596895dffDE15d",
+                functionName: "send",
+                args: [40232, `${promptHash}|${nullifier}|${publicKey}`],
+            });
+        } else if (crosschain === "layerzero_morph") {
             await switchChainAsync({ chainId: 11155111 });
 
             await writeContractAsync({
