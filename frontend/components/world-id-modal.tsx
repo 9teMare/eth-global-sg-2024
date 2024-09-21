@@ -2,15 +2,14 @@
 
 import { BACKEND_URL, WORLD_ACTION_ID, WORLD_APP_ID } from "@/constants";
 import { IDKitWidget, ISuccessResult, VerificationLevel } from "@worldcoin/idkit";
+import ky from "ky";
+import { GlobeIcon } from "lucide-react";
+import { Button } from "./ui/button";
 
 export default function WorldIdModal() {
     const handleVerify = async (proof: ISuccessResult) => {
         console.log("BACKEND_URL", BACKEND_URL);
-        const res = await fetch(BACKEND_URL + "/api/verify", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+        const res = await ky.post(BACKEND_URL + "/api/verify", {
             body: JSON.stringify(proof),
         });
 
@@ -35,8 +34,10 @@ export default function WorldIdModal() {
             verification_level={VerificationLevel.Device}
         >
             {({ open }) => (
-                // This is the button that will open the IDKit modal
-                <button onClick={open}>Verify with World ID</button>
+                <Button variant="ghost" size="icon" onClick={open}>
+                    <GlobeIcon className="h-4 w-4" />
+                    <span className="sr-only">Verify with World ID</span>
+                </Button>
             )}
         </IDKitWidget>
     );
