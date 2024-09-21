@@ -40,7 +40,7 @@ export default function Page() {
                     <CardContent className="p-6">
                         <div className="space-y-4">
                             <div>
-                                <label htmlFor="ai-prompt" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                <label htmlFor="ai-prompt" className="block text-sm font-medium mb-1">
                                     AI Prompt
                                 </label>
                                 <Textarea
