@@ -37,7 +37,7 @@ export default function Component() {
     };
 
     const fetchNfts = async () => {
-        const {data, error} = await supabase.from("asset").select("*");
+        const {data, error} = await supabase.from("asset").select("*").limit(20);
         if (error) {
             console.error(error);
         }
@@ -49,13 +49,12 @@ export default function Component() {
     }, []);
 
     return (
-        <TabsContent value="marketplace" className="backdrop-blur-sm">
+        <TabsContent value="marketplace">
             <h2 className="mt-4 mb-4 text-2xl font-bold">Trending memes</h2>
-            <NeonGradientCard className="bg-transparent">
-                <Marquee pauseOnHover horizontal className="[--duration:60s]">
+            <Marquee pauseOnHover horizontal className="[--duration:60s]">
                     {nfts.map((nft) => (
-                            <Card key={nft.id}>
-                                <CardContent className="bg-transparent p-0 hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.05] rounded-lg">
+                            <Card key={nft.id} className="bg-black/20 border-none hover:bg-black/30">
+                                <CardContent className="bg-transparent p-0 hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.05] rounded-lg backdrop-blur-sm">
                                     <Image
                                         alt={`NFT ${nft.id}`}
                                         className="w-full h-48 object-cover"
@@ -81,19 +80,18 @@ export default function Component() {
                     </Card>
                 ))}
             </Marquee>
-            </NeonGradientCard>
             {/* <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4"> */}
             {/* </div> */}
             <div className="flex justify-between items-center mt-6 mb-6 text-primary">
                 <div className="flex space-x-2">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline">
+                            <Button variant="outline" className="bg-white/20 border-none hover:bg-white/30 text-white hover:text-primary">
                                 <Filter className="h-4 w-4 mr-2" />
                                 Chains
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent>
+                        <DropdownMenuContent className="bg-black border-none hover:bg-black">
                             <DropdownMenuLabel>Select Chains</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {chains.map((chain) => (
@@ -109,12 +107,12 @@ export default function Component() {
                     </DropdownMenu>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline">
+                            <Button variant="outline" className="bg-white/20 border-none hover:bg-white/30 text-white hover:text-primary">
                                 <Filter className="h-4 w-4 mr-2" />
                                 Topics
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent>
+                        <DropdownMenuContent className="bg-black border-none hover:bg-black">
                             <DropdownMenuLabel>Select Topics</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {topics.map((topic) => (
@@ -131,7 +129,7 @@ export default function Component() {
                 </div>
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <Card>
+                <Card className="bg-white/20 border-none hover:bg-white/30">
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Total Volume</CardTitle>
                         <Wallet className="w-4 h-4" />
@@ -141,7 +139,7 @@ export default function Component() {
                         <p className="text-xs ">+20% from last month</p>
                     </CardContent>
                 </Card>
-                <Card>
+                <Card className="bg-white/20 border-none hover:bg-white/30">
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Active Users</CardTitle>
                         <User className="w-4 h-4 " />
@@ -151,7 +149,7 @@ export default function Component() {
                         <p className="text-xs ">+15% from last week</p>
                     </CardContent>
                 </Card>
-                <Card>
+                <Card className="bg-white/20 border-none hover:bg-white/30">
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Floor Price</CardTitle>
                         <svg
