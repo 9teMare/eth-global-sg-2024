@@ -9,6 +9,9 @@ import Image from "next/image";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { usePromptHash } from "@/store/hashStore";
+import useReceiver from "@/hooks/useReceiver";
 
 export default function Mint({ prompt, blob, image }: { prompt: string; blob: Blob; image: string }) {
     const publicKey = useAccount().address!;
@@ -27,57 +30,82 @@ export default function Mint({ prompt, blob, image }: { prompt: string; blob: Bl
         imageBlob: blob,
     });
 
+    const verify = useReceiver({ crosschain: selectedCrossChain });
+
     return (
         <Sheet>
             <SheetTrigger>
                 <Button>That&apos;s the one, let&apos;s go!</Button>
             </SheetTrigger>
-            <SheetContent className="flex flex-col justify-between">
-                <SheetHeader className="flex flex-col space-y-4 h-full">
-                    <SheetTitle>Let&apos;s pump!</SheetTitle>
 
-                    <div className="flex flex-col space-y-1">
-                        <p>Prompt</p>
-                        <Card className="w-full h-full">
-                            <CardContent className="p-2 text-sm text-muted-foreground">{prompt}</CardContent>
-                        </Card>
-                    </div>
+            <SheetContent className="flex w-full">
+                <Tabs defaultValue="source" className="w-full">
+                    <TabsList>
+                        <TabsTrigger value="source">Source</TabsTrigger>
+                        <TabsTrigger value="destination">Destination</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="source">
+                        <div className="flex flex-col h-full justify-between">
+                            <SheetHeader className="flex flex-col space-y-4 h-full">
+                                <SheetTitle>Let&apos;s pump!</SheetTitle>
 
-                    <div className="flex flex-col space-y-1">
-                        <p>Result</p>
-                        <Image src={image} alt="AI-generated image" width={1000} height={1000} className="rounded-lg" />
-                    </div>
+                                <div className="flex flex-col space-y-1">
+                                    <p>Prompt</p>
+                                    <Card className="w-full h-full">
+                                        <CardContent className="p-2 text-sm text-muted-foreground">{prompt}</CardContent>
+                                    </Card>
+                                </div>
 
-                    <div className="flex flex-col space-y-1">
-                        <p>Give it a name</p>
-                        <Input
-                            type="text"
-                            placeholder="Enter a name for your image"
-                            value={imageTitle}
-                            onChange={(e) => setImageTitle(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
-                        />
-                    </div>
+                                <div className="flex flex-col space-y-1">
+                                    <p>Result</p>
+                                    <Image src={image} alt="AI-generated image" width={300} height={300} className="rounded-lg" />
+                                </div>
 
-                    <div className="flex flex-col space-y-1">
-                        <p>Cross-chain Protocol</p>
-                        <Select value={selectedCrossChain} onValueChange={(value) => setSelectedCrossChain(value as "chainlink" | "layerzero")}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Cross-chain protocol" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="chainlink">Chainlink</SelectItem>
-                                <SelectItem value="layerzero">LayerZero</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </SheetHeader>
+                                <div className="flex flex-col space-y-1">
+                                    <p>Give it a name</p>
+                                    <Input
+                                        type="text"
+                                        placeholder="Enter a name for your image"
+                                        value={imageTitle}
+                                        onChange={(e) => setImageTitle(e.target.value)}
+                                        className="w-full p-2 border border-gray-300 rounded-lg"
+                                    />
+                                </div>
 
-                <div>
-                    <WorldIdModal setNullifier={setNullifier} setIsHuman={setIsHuman} />
-                </div>
+                                <div className="flex flex-col space-y-1">
+                                    <p>Cross-chain Protocol</p>
+                                    <Select
+                                        value={selectedCrossChain}
+                                        onValueChange={(value) => setSelectedCrossChain(value as "chainlink" | "layerzero")}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Cross-chain protocol" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="chainlink">Chainlink</SelectItem>
+                                            <SelectItem value="layerzero">LayerZero</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </SheetHeader>
 
-                {isHuman && <Button onClick={async () => await send()}>Send</Button>}
+                            <div className="mt-10">
+                                <WorldIdModal setNullifier={setNullifier} setIsHuman={setIsHuman} />
+                            </div>
+
+                            {isHuman && <Button onClick={async () => await send()}>Send</Button>}
+                        </div>
+                    </TabsContent>
+                    <TabsContent value="destination">
+                        <div className="flex flex-col h-full justify-between">
+                            <div className="mt-10">
+                                <WorldIdModal setNullifier={setNullifier} setIsHuman={setIsHuman} />
+                            </div>
+
+                            {isHuman && <Button onClick={async () => await verify()}>verify</Button>}
+                        </div>
+                    </TabsContent>
+                </Tabs>
             </SheetContent>
         </Sheet>
     );

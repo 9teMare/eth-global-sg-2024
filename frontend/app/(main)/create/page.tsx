@@ -22,7 +22,7 @@ export default function Page() {
     const handleGenerateImage = async () => {
         setIsGenerating(true);
         await ky(`https://image.pollinations.ai/prompt/${aiPrompt}`, {
-            searchParams: { width: 2000, height: 2000 },
+            searchParams: { width: 1000, height: 1000 },
             timeout: 2147483647,
             cache: "no-cache",
         })

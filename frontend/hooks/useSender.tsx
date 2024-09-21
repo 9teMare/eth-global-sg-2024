@@ -7,6 +7,7 @@ import { hash } from "@/lib/utils";
 import { useContext } from "react";
 import { useWriteContract, useSwitchChain } from "wagmi";
 import { v4 as uuidv4 } from "uuid";
+import { usePromptHash } from "@/store/hashStore";
 
 export default function useSender({
     crosschain,
@@ -25,11 +26,13 @@ export default function useSender({
 }) {
     const { writeContractAsync } = useWriteContract();
     const { switchChainAsync } = useSwitchChain();
+    const { updateHash, updateImageUrl } = usePromptHash();
 
     const supabase = useContext(SupabaseContext);
 
     const send = async () => {
         const promptHash = await hash(prompt);
+        updateHash(promptHash);
 
         const id = uuidv4();
 
@@ -39,6 +42,8 @@ export default function useSender({
             console.error(s3result?.error);
             return;
         }
+
+        updateImageUrl(s3result.data.fullPath);
 
         const insertDbResult = await supabase?.from("asset").insert([
             {
@@ -71,9 +76,9 @@ export default function useSender({
             await writeContractAsync({
                 abi: layerzeroSender,
                 value: BigInt(5000000000000000),
-                address: "0x67abB8eBB917f8D2D9FeA7d3Cb596895dffDE15d",
+                address: "0x6C7Ab2202C98C4227C5c46f1417D81144DA716Ff",
                 functionName: "send",
-                args: [40232, `${promptHash}|${nullifier}|${publicKey}`],
+                args: [40322, `${promptHash}|${nullifier}|${publicKey}`],
             });
         }
     };
