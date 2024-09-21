@@ -22,7 +22,7 @@ export default function Page() {
     const handleGenerateImage = async () => {
         setIsGenerating(true);
         await ky(`https://image.pollinations.ai/prompt/${aiPrompt}`, {
-            searchParams: { width: 2000, height: 2000 },
+            searchParams: { width: 1000, height: 1000 },
             timeout: 2147483647,
             cache: "no-cache",
         })
@@ -40,7 +40,7 @@ export default function Page() {
     return (
         <TabsContent value="create" className="flex flex-col h-[82vh] my-auto w-full pt-3">
             <div className="flex w-full justify-center items-center space-x-8 h-full">
-                <Card className="w-full h-full">
+                <Card className="w-full h-full opacity-80 bg-background">
                     <CardContent className="flex w-full h-full flex-col p-6 text-center items-center justify-center">
                         {!isGenerating && generatedImage ? (
                             <div className="mt-6">
@@ -59,7 +59,7 @@ export default function Page() {
                     </CardContent>
                 </Card>
 
-                <Card className="w-full h-full">
+                <Card className="w-full h-full opacity-80 bg-background">
                     <CardContent className="p-6">
                         <div className="space-y-4">
                             <div>

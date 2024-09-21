@@ -7,6 +7,7 @@ import { hash } from "@/lib/utils";
 import { useContext } from "react";
 import { useWriteContract, useSwitchChain } from "wagmi";
 import { v4 as uuidv4 } from "uuid";
+import { usePromptHash } from "@/store/hashStore";
 
 export default function useSender({
     crosschain,
@@ -16,7 +17,7 @@ export default function useSender({
     imageTitle,
     imageBlob,
 }: {
-    crosschain: "chainlink" | "layerzero";
+    crosschain: "chainlink" | "layerzero_op" | "layerzero_morph";
     publicKey: string;
     prompt: string;
     nullifier: string;
@@ -25,11 +26,13 @@ export default function useSender({
 }) {
     const { writeContractAsync } = useWriteContract();
     const { switchChainAsync } = useSwitchChain();
+    const { updateHash, updateImageUrl } = usePromptHash();
 
     const supabase = useContext(SupabaseContext);
 
     const send = async () => {
         const promptHash = await hash(prompt);
+        updateHash(promptHash);
 
         const id = uuidv4();
 
@@ -40,6 +43,8 @@ export default function useSender({
             return;
         }
 
+        updateImageUrl(s3result.data.fullPath);
+
         const insertDbResult = await supabase?.from("asset").insert([
             {
                 public_key: publicKey,
@@ -48,6 +53,7 @@ export default function useSender({
                 hash: promptHash,
                 nullifier: nullifier,
                 image_url: s3result.data.fullPath,
+                chain: crosschain === "chainlink" ? "avax" : crosschain === "layerzero_op" ? "op" : "morph",
             },
         ]);
 
@@ -65,7 +71,7 @@ export default function useSender({
                 functionName: "sendMessage",
                 args: ["16015286601757825753", "0x4c94a4b3fA89B438A8974b288fE31e85cf264532", `${promptHash}|${nullifier}|${publicKey}`],
             });
-        } else if (crosschain === "layerzero") {
+        } else if (crosschain === "layerzero_op") {
             await switchChainAsync({ chainId: 11155111 });
 
             await writeContractAsync({
@@ -74,6 +80,16 @@ export default function useSender({
                 address: "0x67abB8eBB917f8D2D9FeA7d3Cb596895dffDE15d",
                 functionName: "send",
                 args: [40232, `${promptHash}|${nullifier}|${publicKey}`],
+            });
+        } else if (crosschain === "layerzero_morph") {
+            await switchChainAsync({ chainId: 11155111 });
+
+            await writeContractAsync({
+                abi: layerzeroSender,
+                value: BigInt(5000000000000000),
+                address: "0x6C7Ab2202C98C4227C5c46f1417D81144DA716Ff",
+                functionName: "send",
+                args: [40322, `${promptHash}|${nullifier}|${publicKey}`],
             });
         }
     };

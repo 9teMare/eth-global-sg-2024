@@ -18,6 +18,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import Marquee from "@/components/magicui/marquee";
 import { NeonGradientCard } from "@/components/magicui/neon-gradient-card";
 import { createClient } from "@/utils/supabase/client";
+import { AvaxIcon, EthIcon, MinaIcon, MorphIcon, OpIcon } from "@/components/icons/eth";
 
 export default function Component() {
     const supabase = createClient();
@@ -37,63 +38,72 @@ export default function Component() {
     };
 
     const fetchNfts = async () => {
-        const {data, error} = await supabase.from("asset").select("*");
+        const { data, error } = await supabase.from("asset").select("*").limit(20);
         if (error) {
             console.error(error);
         }
         setNfts(data || []);
     };
-    
+
     useEffect(() => {
         fetchNfts();
     }, []);
 
+    const chainIcons = {
+        eth: <EthIcon />,
+        avax: <AvaxIcon />,
+        op: <OpIcon />,
+        mina: <MinaIcon />,
+        morph: <MorphIcon />,
+    };
+
     return (
-        <TabsContent value="marketplace" className="backdrop-blur-sm">
+        <TabsContent value="marketplace">
             <h2 className="mt-4 mb-4 text-2xl font-bold">Trending memes</h2>
-            <NeonGradientCard className="bg-transparent">
-                <Marquee pauseOnHover horizontal className="[--duration:60s]">
-                    {nfts.map((nft) => (
-                            <Card key={nft.id}>
-                                <CardContent className="bg-transparent p-0 hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.05] rounded-lg">
-                                    <Image
-                                        alt={`NFT ${nft.id}`}
-                                        className="w-full h-48 object-cover"
-                                        height="200"
-                                        src={`https://udhrubteotgugzsxqbgf.supabase.co/storage/v1/object/public/${nft.image_url}`}
-                                        style={{
-                                            aspectRatio: "300/200",
-                                            objectFit: "cover",
-                                            borderTopLeftRadius: "10px",
-                                            borderTopRightRadius: "10px",
-                                        }}
-                                        width="300"
-                                    />
-                                    <div className="p-4">
-                                        <h3 className="font-bold">{nft.image_title}</h3>
-                                        <p className="text-sm ">Floor: 2.5 ETH</p>
-                                        <div className="mt-2 flex items-center justify-between">
-                                            <span className="text-sm font-semibold">Current Bid: 3.2 ETH</span>
-                                            <Button size="sm">Bid</Button>
-                                        </div>
+            <Marquee pauseOnHover horizontal className="[--duration:60s]">
+                {nfts.map((nft) => (
+                    <Card key={nft.id} className="bg-black/20 border-none hover:bg-black/30">
+                        <CardContent className="bg-transparent p-0 hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.05] rounded-lg backdrop-blur-sm">
+                            <Image
+                                alt={`NFT ${nft.id}`}
+                                className="w-full h-48 object-cover"
+                                height="200"
+                                src={`https://udhrubteotgugzsxqbgf.supabase.co/storage/v1/object/public/${nft.image_url}`}
+                                style={{
+                                    aspectRatio: "300/200",
+                                    objectFit: "cover",
+                                    borderTopLeftRadius: "10px",
+                                    borderTopRightRadius: "10px",
+                                }}
+                                width="300"
+                            />
+                            <div className="p-4">
+                                <div className="flex flex-row items-center">
+                                    <h3 className="font-bold truncate max-w-[200px]">{nft.image_title}</h3>
+                                    <div className="flex items-center h-5 w-5 ml-auto">{chainIcons[nft.chain as keyof typeof chainIcons]}</div>
+                                </div>
+                                <p className="text-sm ">Floor: 2.5 ETH</p>
+                                <div className="mt-2 flex items-center justify-between">
+                                    <span className="text-sm font-semibold">Current Bid: 3.2 ETH</span>
+                                    <Button size="sm">Bid</Button>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
                 ))}
             </Marquee>
-            </NeonGradientCard>
             {/* <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4"> */}
             {/* </div> */}
             <div className="flex justify-between items-center mt-6 mb-6 text-primary">
                 <div className="flex space-x-2">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline">
+                            <Button variant="outline" className="bg-white/20 border-none hover:bg-white/30 text-white hover:text-primary">
                                 <Filter className="h-4 w-4 mr-2" />
                                 Chains
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent>
+                        <DropdownMenuContent className="bg-black border-none hover:bg-black">
                             <DropdownMenuLabel>Select Chains</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {chains.map((chain) => (
@@ -109,12 +119,12 @@ export default function Component() {
                     </DropdownMenu>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline">
+                            <Button variant="outline" className="bg-white/20 border-none hover:bg-white/30 text-white hover:text-primary">
                                 <Filter className="h-4 w-4 mr-2" />
                                 Topics
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent>
+                        <DropdownMenuContent className="bg-black border-none hover:bg-black">
                             <DropdownMenuLabel>Select Topics</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {topics.map((topic) => (
@@ -131,7 +141,7 @@ export default function Component() {
                 </div>
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <Card>
+                <Card className="bg-white/20 border-none hover:bg-white/30">
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Total Volume</CardTitle>
                         <Wallet className="w-4 h-4" />
@@ -141,7 +151,7 @@ export default function Component() {
                         <p className="text-xs ">+20% from last month</p>
                     </CardContent>
                 </Card>
-                <Card>
+                <Card className="bg-white/20 border-none hover:bg-white/30">
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Active Users</CardTitle>
                         <User className="w-4 h-4 " />
@@ -151,7 +161,7 @@ export default function Component() {
                         <p className="text-xs ">+15% from last week</p>
                     </CardContent>
                 </Card>
-                <Card>
+                <Card className="bg-white/20 border-none hover:bg-white/30">
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Floor Price</CardTitle>
                         <svg
