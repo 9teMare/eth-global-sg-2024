@@ -33,7 +33,7 @@ export default function Component() {
 
     return (
         <TabsContent value="marketplace">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 text-primary">
                 <div className="flex space-x-2">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -83,28 +83,28 @@ export default function Component() {
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Total Volume</CardTitle>
-                        <Wallet className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        <Wallet className="w-4 h-4" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">$12.4M</div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">+20% from last month</p>
+                        <p className="text-xs ">+20% from last month</p>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Active Users</CardTitle>
-                        <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        <User className="w-4 h-4 " />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">8,942</div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">+15% from last week</p>
+                        <p className="text-xs ">+15% from last week</p>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Floor Price</CardTitle>
                         <svg
-                            className=" w-4 h-4 text-gray-500 dark:text-gray-400"
+                            className=" w-4 h-4 "
                             fill="none"
                             height="24"
                             stroke="currentColor"
@@ -121,7 +121,7 @@ export default function Component() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">2.5 ETH</div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">-3% from last week</p>
+                        <p className="text-xs ">-3% from last week</p>
                     </CardContent>
                 </Card>
             </div>
@@ -143,7 +143,7 @@ export default function Component() {
                             />
                             <div className="p-4">
                                 <h3 className="font-bold">CryptoPunk #{i}</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Floor: 2.5 ETH</p>
+                                <p className="text-sm ">Floor: 2.5 ETH</p>
                                 <div className="mt-2 flex items-center justify-between">
                                     <span className="text-sm font-semibold">Current Bid: 3.2 ETH</span>
                                     <Button size="sm">Bid</Button>
