@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TabsContent } from "@/components/ui/tabs";
+import Marquee from "@/components/magicui/marquee";
 
 export default function Component() {
     const [selectedChains, setSelectedChains] = useState<string[]>([]);
@@ -126,33 +127,35 @@ export default function Component() {
                 </Card>
             </div>
             <h2 className="mt-10 mb-4 text-2xl font-bold">Trending memes</h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <Marquee pauseOnHover horizontal className="[--duration:20s]">
                 {[1, 2, 3, 4].map((i) => (
-                    <Card key={i}>
-                        <CardContent className="p-0">
-                            <Image
-                                alt={`NFT ${i}`}
-                                className="w-full h-48 object-cover"
-                                height="200"
-                                src={`/placeholder.svg?height=200&width=300`}
-                                style={{
-                                    aspectRatio: "300/200",
-                                    objectFit: "cover",
-                                }}
-                                width="300"
-                            />
-                            <div className="p-4">
-                                <h3 className="font-bold">CryptoPunk #{i}</h3>
-                                <p className="text-sm ">Floor: 2.5 ETH</p>
-                                <div className="mt-2 flex items-center justify-between">
-                                    <span className="text-sm font-semibold">Current Bid: 3.2 ETH</span>
-                                    <Button size="sm">Bid</Button>
+                        <Card key={i}>
+                            <CardContent className="p-0 hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.05] rounded-lg">
+                                <Image
+                                    alt={`NFT ${i}`}
+                                    className="w-full h-48 object-cover"
+                                    height="200"
+                                    src={`/placeholder.svg?height=200&width=300`}
+                                    style={{
+                                        aspectRatio: "300/200",
+                                        objectFit: "cover",
+                                    }}
+                                    width="300"
+                                />
+                                <div className="p-4">
+                                    <h3 className="font-bold">CryptoPunk #{i}</h3>
+                                    <p className="text-sm ">Floor: 2.5 ETH</p>
+                                    <div className="mt-2 flex items-center justify-between">
+                                        <span className="text-sm font-semibold">Current Bid: 3.2 ETH</span>
+                                        <Button size="sm">Bid</Button>
+                                    </div>
                                 </div>
-                            </div>
-                        </CardContent>
-                    </Card>
+                            </CardContent>
+                        </Card>
                 ))}
-            </div>
+            </Marquee>
+            {/* <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4"> */}
+            {/* </div> */}
         </TabsContent>
     );
 }
