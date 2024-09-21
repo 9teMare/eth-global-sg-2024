@@ -22,6 +22,9 @@ app.post("/api/verify", async (c) => {
     }
 });
 
+// Add a health check route
+app.get("/", (c) => c.text("Hello from Hono!"));
+
 export default {
     port: 8080,
     fetch: app.fetch,
