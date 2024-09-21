@@ -1,0 +1,6 @@
+source Fuji
+address: 0xB6C6f39A6F24ec4ab896220E9702d113F4d1b9A1
+
+destination Sepolia
+address: 0xd37D942D220272A2c292C33E240ed5AacBbCbaE9
+chain selector: 16015286601757825753
