@@ -18,7 +18,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import Marquee from "@/components/magicui/marquee";
 import { NeonGradientCard } from "@/components/magicui/neon-gradient-card";
 import { createClient } from "@/utils/supabase/client";
-import { AvaxIcon, EthIcon, MinaIcon, OpIcon } from "@/components/icons/eth";
+import { AvaxIcon, EthIcon, MinaIcon, MorphIcon, OpIcon } from "@/components/icons/eth";
 
 export default function Component() {
     const supabase = createClient();
@@ -38,57 +38,55 @@ export default function Component() {
     };
 
     const fetchNfts = async () => {
-        const {data, error} = await supabase.from("asset").select("*").limit(20);
+        const { data, error } = await supabase.from("asset").select("*").limit(20);
         if (error) {
             console.error(error);
         }
         setNfts(data || []);
     };
-        
+
     useEffect(() => {
         fetchNfts();
     }, []);
 
-
     const chainIcons = {
-        "eth": <EthIcon />,
-        "avax": <AvaxIcon />,
-        "op": <OpIcon />,
-        "mina": <MinaIcon />,
-    }
+        eth: <EthIcon />,
+        avax: <AvaxIcon />,
+        op: <OpIcon />,
+        mina: <MinaIcon />,
+        morph: <MorphIcon />,
+    };
 
     return (
         <TabsContent value="marketplace">
             <h2 className="mt-4 mb-4 text-2xl font-bold">Trending memes</h2>
             <Marquee pauseOnHover horizontal className="[--duration:60s]">
-                    {nfts.map((nft) => (
-                            <Card key={nft.id} className="bg-black/20 border-none hover:bg-black/30">
-                                <CardContent className="bg-transparent p-0 hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.05] rounded-lg backdrop-blur-sm">
-                                    <Image
-                                        alt={`NFT ${nft.id}`}
-                                        className="w-full h-48 object-cover"
-                                        height="200"
-                                        src={`https://udhrubteotgugzsxqbgf.supabase.co/storage/v1/object/public/${nft.image_url}`}
-                                        style={{
-                                            aspectRatio: "300/200",
-                                            objectFit: "cover",
-                                            borderTopLeftRadius: "10px",
-                                            borderTopRightRadius: "10px",
-                                        }}
-                                        width="300"
-                                    />
-                                    <div className="p-4">
-                                        <div className="flex flex-row items-center">
-                                            <h3 className="font-bold truncate max-w-[200px]">{nft.image_title}</h3> 
-                                            <div className="flex items-center h-5 w-5 ml-auto">
-                                                {chainIcons[nft.chain as keyof typeof chainIcons]}
-                                            </div>
-                                        </div>
-                                        <p className="text-sm ">Floor: 2.5 ETH</p>
-                                        <div className="mt-2 flex items-center justify-between">
-                                            <span className="text-sm font-semibold">Current Bid: 3.2 ETH</span>
-                                            <Button size="sm">Bid</Button>
-                                        </div>
+                {nfts.map((nft) => (
+                    <Card key={nft.id} className="bg-black/20 border-none hover:bg-black/30">
+                        <CardContent className="bg-transparent p-0 hover:bg-gray-950/[.05] dark:hover:bg-gray-50/[.05] rounded-lg backdrop-blur-sm">
+                            <Image
+                                alt={`NFT ${nft.id}`}
+                                className="w-full h-48 object-cover"
+                                height="200"
+                                src={`https://udhrubteotgugzsxqbgf.supabase.co/storage/v1/object/public/${nft.image_url}`}
+                                style={{
+                                    aspectRatio: "300/200",
+                                    objectFit: "cover",
+                                    borderTopLeftRadius: "10px",
+                                    borderTopRightRadius: "10px",
+                                }}
+                                width="300"
+                            />
+                            <div className="p-4">
+                                <div className="flex flex-row items-center">
+                                    <h3 className="font-bold truncate max-w-[200px]">{nft.image_title}</h3>
+                                    <div className="flex items-center h-5 w-5 ml-auto">{chainIcons[nft.chain as keyof typeof chainIcons]}</div>
+                                </div>
+                                <p className="text-sm ">Floor: 2.5 ETH</p>
+                                <div className="mt-2 flex items-center justify-between">
+                                    <span className="text-sm font-semibold">Current Bid: 3.2 ETH</span>
+                                    <Button size="sm">Bid</Button>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
